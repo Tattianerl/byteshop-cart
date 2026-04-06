@@ -1,7 +1,7 @@
 {
-  "name": "shoppe-cart-api",
+  "name": "byteshop-api",
   "version": "1.0.0",
-  "description": "Api baseado no carrinho de compra da shoppe",
+  "description": "Sistema de checkout e carrinho de compras",
   "main": "index.js",
   "scripts": {
   "start": "node src/server.js",
