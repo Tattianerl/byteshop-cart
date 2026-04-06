@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevStore | Carrinho</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛒 DevStore</h1>
+            <p>Gerencie seus itens com facilidade</p>
+        </header>
+
+        <section class="add-item-card">
+            <h3>Novo Produto</h3>
+            <div class="form-group">
+                <input type="text" id="name" placeholder="Nome do produto" required>
+                <div class="row">
+                    <input type="number" id="price" placeholder="Preço (R$)" step="0.01" min="0.01">
+                    <input type="number" id="quantity" placeholder="Qtd" value="1" min="1">
+                </div>
+                <button onclick="addItem()" class="btn-primary">Adicionar ao Carrinho</button>
+            </div>
+        </section>
+
+        <section class="cart-section">
+            <h3>Seu Carrinho</h3>
+            <div id="cart-list">
+                <p class="empty-msg">O carrinho está vazio...</p>
+            </div>
+        </section>
+
+        <footer class="cart-footer">
+            <div class="total-box">
+                <span>Total do Pedido:</span>
+                <span id="total-amount">R$ 0,00</span>
+            </div>
+            <div id="message" style="display:none; margin-top:10px;"></div>
+            <button onclick="checkout()" id="btn-checkout" class="btn-checkout">Finalizar Compra</button>
+        </footer>
+    </div>
+
+    <div id="receipt-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Compra Finalizada!</h2>
+            <div id="receipt-details"></div>
+            <button onclick="closeReceipt()" class="btn-close">Fechar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
