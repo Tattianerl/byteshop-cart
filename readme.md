@@ -67,3 +67,5 @@ DELETE /cart/:id: Remove o item completamente do carrinho.
 GET /cart/total: Retorna a soma total dos valores.
 
 POST/cart/checkout: Finaliza a compra e gera recibo
+
+🔗 [Acesse a ByteShop ao vivo aqui!](https://byteshop-cart.onrender.com/)
