@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "id": "d0d04c12-8fac-493b-9a0d-e8419cd2e4c5",
+    "name": "mouse",
+    "price": 39,
+    "quantity": 1
+  },
+  {
+    "id": "42fb3e7e-33b8-4ca0-a78d-4629b1cc303f",
+    "name": "teclado",
+    "price": 79,
+    "quantity": 1
+  }
+]
