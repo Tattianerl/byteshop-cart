@@ -1,4 +1,4 @@
-const API = "http://localhost:3000/cart";
+const API = "/cart";
 
 // 🔹 FEEDBACK
 function showMessage(text, type = "success") {
