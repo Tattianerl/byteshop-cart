@@ -32,7 +32,7 @@ Uma aplicação Full Stack robusta para gerenciamento de carrinho de compras, fo
 
 1. **Clone o repositório**:
    ```bash
-   git clone [https://github.com/Tattianerl/shoppe-cart-api.git](https://github.com/Tattianerl/byteshop-cart.git))
+   git clone https://github.com/Tattianerl/byteshop-cart.git
    cd shoppe-cart-api
 ## 📂 Estrutura do Projeto
 - `src/`: Código fonte do servidor e lógica de negócio.
