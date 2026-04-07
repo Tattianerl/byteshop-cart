@@ -1,5 +1,4 @@
-const API = "/cart";
-
+const API = `${window.location.origin}/cart`;
 // 🔹 FEEDBACK
 function showMessage(text, type = "success") {
   const msg = document.getElementById("message");
