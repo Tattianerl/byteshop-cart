@@ -14,22 +14,20 @@ body {
     margin: 0;
     display: flex;
     justify-content: center;
+    min-height: 100vh;
 }
 
 .container {
     width: 100%;
     max-width: 500px;
-    padding: 20px;
+    padding: 15px;
+    box-sizing: border-box;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
+header { text-align: center; margin-bottom: 25px; }
 h1 { margin-bottom: 5px; color: var(--primary); }
 
-/* Card de Adição */
+/* Form */
 .add-item-card {
     background: var(--card);
     padding: 20px;
@@ -37,81 +35,83 @@ h1 { margin-bottom: 5px; color: var(--primary); }
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     margin-bottom: 25px;
 }
-
-.form-group { display: flex; flex-direction: column; gap: 10px; }
-
+.form-group { display: flex; flex-direction: column; gap: 12px; }
 .row { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; }
+
+@media (max-width: 400px) {
+    .row { grid-template-columns: 1fr; }
+}
 
 input {
     padding: 12px;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
     font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .btn-primary {
     background: var(--primary);
     color: white;
     border: none;
-    padding: 12px;
+    padding: 14px;
     border-radius: 8px;
     font-weight: bold;
     cursor: pointer;
-    transition: opacity 0.2s;
 }
 
-/* Listagem de Itens */
+/* Toast Flutuante */
+.toast-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    font-weight: bold;
+    display: none;
+    white-space: nowrap;
+}
+.toast-message.error { background: var(--danger); }
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, -20px); }
+    15% { opacity: 1; transform: translate(-50%, 0); }
+    85% { opacity: 1; transform: translate(-50%, 0); }
+    100% { opacity: 0; transform: translate(-50%, -20px); }
+}
+
+/* Itens do Carrinho */
 .item-card {
     background: var(--card);
     margin-bottom: 10px;
-    padding: 15px;
-    border-radius: 8px;
+    padding: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-radius: 8px;
     border-left: 5px solid var(--primary);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
-.item-info small {
-    display: block;
-    color: #64748b;
-    font-size: 0.9em;
-}
-.item-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.btn-plus {
-    background: var(--success);
-    color: white;
-}
+.item-info { flex: 1; overflow: hidden; }
+.item-info strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-info small { display: block; color: #64748b; }
 
-.qty-display {
-    font-weight: bold;
-    min-width: 20px;
-    text-align: center;
+.item-actions { display: flex; align-items: center; gap: 10px; }
+.btn-sm { 
+    padding: 8px; min-width: 38px; min-height: 38px; border: none; 
+    border-radius: 6px; cursor: pointer; font-weight: bold; 
 }
-.btn-sm {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-}
+.btn-plus { background: var(--success); color: white; }
+.btn-minus { background: #e2e8f0; }
+.btn-delete { background: #fee2e2; color: var(--danger); }
 
-.btn-sm i {
-    pointer-events: none;
-}
-
-.btn-minus:hover {
-    background: #e2e8f0;
-}
-
-.btn-delete:hover {
-    background: #fecaca;
-}
-
-/* Rodapé */
+/* Footer */
 .cart-footer {
     margin-top: 20px;
     padding: 20px;
@@ -119,59 +119,28 @@ input {
     color: white;
     border-radius: 12px;
 }
-
-.total-box {
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.3em;
-    font-weight: bold;
-}
-
-#total-amount { color: #4ade80; }
+.total-box { display: flex; justify-content: space-between; font-size: 1.2em; font-weight: bold; }
+#total-amount { color: #4ade80; transition: transform 0.2s; display: inline-block; }
 
 .btn-checkout {
-    width: 100%;
-    background: #16a34a;
-    color: white;
-    border: none;
-    padding: 15px;
-    border-radius: 8px;
-    font-size: 1.1em;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 15px;
-    transition: background 0.3s;
+    width: 100%; background: var(--success); color: white; border: none;
+    padding: 16px; border-radius: 8px; font-weight: bold; margin-top: 15px; cursor: pointer;
 }
-
-.btn-checkout:hover {
-    background: #15803d;
-}
-
 .btn-checkout:disabled {
-    background: #94a3b8;
+    background: #94a3b8; 
     cursor: not-allowed;
+    opacity: 0.7;
+    transform: none !important; 
 }
-
+/* Modal */
 .modal {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7);
-    display: flex; align-items: center; justify-content: center;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 100;
 }
 .modal-content {
-    background: white; padding: 20px; border-radius: 12px;
-    width: 90%; max-width: 400px; text-align: center;
-    font-family: 'Courier New', Courier, monospace; /* Fonte de recibo */
+    background: white; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px;
+    max-height: 80vh; overflow-y: auto; font-family: 'Courier New', monospace;
 }
-.receipt-line {
-    display: flex; justify-content: space-between;
-    border-bottom: 1px dashed #ccc; padding: 5px 0;
-}
-.receipt-total {
-    font-size: 1.4em; font-weight: bold; margin-top: 15px;
-    color: #16a34a;
-}
-.btn-close {
-    margin-top: 20px; padding: 10px 20px;
-    background: #2563eb; color: white; border: none; border-radius: 5px;
-}
+.receipt-line { display: flex; justify-content: space-between; border-bottom: 1px dashed #ccc; padding: 5px 0; }
+.receipt-total { font-size: 1.3em; font-weight: bold; margin-top: 15px; color: var(--success); }
+.btn-close { margin-top: 20px; padding: 12px; width: 100%; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; }

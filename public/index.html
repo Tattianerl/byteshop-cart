@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+    <div id="message" class="toast-message"></div>
+
     <div class="container">
         <header>
             <h1>🛒 ByteShop</h1>
@@ -38,7 +40,6 @@
                 <span>Total do Pedido:</span>
                 <span id="total-amount">R$ 0,00</span>
             </div>
-            <div id="message" style="display:none; margin-top:10px;"></div>
             <button onclick="checkout()" id="btn-checkout" class="btn-checkout">Finalizar Compra</button>
         </footer>
     </div>
