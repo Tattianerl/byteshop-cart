@@ -33,7 +33,7 @@ Uma aplicação Full Stack robusta para gerenciamento de carrinho de compras, fo
 1. **Clone o repositório**:
    ```bash
    git clone https://github.com/Tattianerl/byteshop-cart.git
-   cd shoppe-cart-api
+   cd shoppe-cart
 ## 📂 Estrutura do Projeto
 - `src/`: Código fonte do servidor e lógica de negócio.
 - `public/`: Arquivos estáticos (HTML, CSS, JS) da interface.
@@ -51,7 +51,7 @@ npm start
 ```
 3. Acesse no navegador:
 ```Bash
-http://localhost:3000
+http://127.0.0.1:5500/public/index.html
 ```
 # 🛣️ Endpoints da API
 GET /cart: Lista todos os itens.

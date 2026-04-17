@@ -1,67 +1,17 @@
-const API = `${window.location.origin}/cart`;
+const API = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://localhost:3000/cart"
+    : "https://byteshop-cart.onrender.com/cart";
 
-// 🔹 MENSAGEM TOAST REINICIÁVEL
 function showMessage(text, type = "success") {
     const msg = document.getElementById("message");
     msg.innerText = text;
     msg.style.display = "block";
-    
-    msg.classList.remove("error");
-    if (type === "error") msg.classList.add("error");
-
-    // Reinicia animação
-    msg.style.animation = 'none';
-    msg.offsetHeight; 
-    msg.style.animation = 'fadeInOut 3s ease-in-out';
-
+    msg.className = "toast-message " + (type === "error" ? "error" : "");
     setTimeout(() => { msg.style.display = "none"; }, 3000);
-}
-
-function setLoading(isLoading) {
-    const btn = document.querySelector(".btn-primary");
-    btn.disabled = isLoading;
-    btn.innerText = isLoading ? "Adicionando..." : "Adicionar ao Carrinho";
-}
-
-async function addItem() {
-    const nameInput = document.getElementById("name");
-    const priceInput = document.getElementById("price");
-    const quantityInput = document.getElementById("quantity");
-
-    const name = nameInput.value.trim();
-    const price = parseFloat(priceInput.value);
-    const quantity = parseInt(quantityInput.value);
-
-    if (name.length < 2) return showMessage("Nome muito curto", "error");
-    if (isNaN(price) || price <= 0) return showMessage("Preço inválido", "error");
-
-    try {
-        setLoading(true);
-        const response = await fetch(API, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, price, quantity })
-        });
-        if (!response.ok) throw new Error("Erro ao adicionar");
-        
-        showMessage("Item adicionado!");
-        clearForm();
-        loadCart();
-    } catch (error) {
-        showMessage(error.message, "error");
-    } finally {
-        setLoading(false);
-    }
 }
 
 function formatCurrency(value) {
     return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
-
-function clearForm() {
-    document.getElementById("name").value = "";
-    document.getElementById("price").value = "";
-    document.getElementById("quantity").value = 1;
 }
 
 async function loadCart() {
@@ -69,15 +19,20 @@ async function loadCart() {
         const res = await fetch(API);
         const cart = await res.json();
         renderCart(cart);
-        updateTotal();
-    } catch {
-        console.error("Erro ao carregar");
+        
+        const resTotal = await fetch(`${API}/total`);
+        const dataTotal = await resTotal.json();
+        document.getElementById("total-amount").innerText = formatCurrency(dataTotal.total || 0);
+    } catch (e) {
+        console.error("Erro ao carregar dados.");
     }
 }
 
 function renderCart(cart) {
     const container = document.getElementById("cart-list");
-    document.getElementById("btn-checkout").disabled = cart.length === 0;
+    const checkoutBtn = document.getElementById("btn-checkout");
+    
+    if (checkoutBtn) checkoutBtn.disabled = cart.length === 0;
 
     if (!cart.length) {
         container.innerHTML = `<p class="empty-msg">O carrinho está vazio...</p>`;
@@ -86,95 +41,97 @@ function renderCart(cart) {
 
     container.innerHTML = cart.map(item => `
         <div class="item-card">
-            <div class="item-info">
-                <strong>${item.name}</strong>
+            <div>
+                <strong>${item.name}</strong><br>
                 <small>${formatCurrency(item.price)} x ${item.quantity}</small>
-                <small>Sub: ${formatCurrency(item.price * item.quantity)}</small>
             </div>
-            <div class="item-actions">
-                <button class="btn-sm btn-minus" onclick="removeItem('${item.id}')">-1</button>
-                <span class="qty-display">${item.quantity}</span>
-                <button class="btn-sm btn-plus" onclick="addOneItem('${item.id}')">+1</button>
-                <button class="btn-sm btn-delete" onclick="deleteItem('${item.id}')">🗑️</button>
+            <div>
+                <button type="button" class="btn-sm" onclick="changeQty('${item.id}', 'remove')">-</button>
+                <span style="margin: 0 10px">${item.quantity}</span>
+                <button type="button" class="btn-sm" onclick="changeQty('${item.id}', 'add')">+</button>
+                <button type="button" class="btn-sm btn-delete" onclick="deleteItem('${item.id}')"><i class="fas fa-trash"></i></button>
             </div>
         </div>
     `).join("");
 }
 
-async function addOneItem(id) {
-    await fetch(`${API}/add`, { 
-        method: "POST", 
-        headers: { "Content-Type": "application/json" }, 
-        body: JSON.stringify({ id }) 
-    });
-    loadCart();
+async function addItem() {
+    const name = document.getElementById("name").value.trim();
+    const price = parseFloat(document.getElementById("price").value);
+    const quantity = parseInt(document.getElementById("quantity").value);
+
+    if (name === "") {
+        return showMessage("Preencha o nome do produto", "error");
+    }
+    if (isNaN(price) || price <= 0){
+        return showMessage("Digite um valor válido maior que zero", "error");
+    }
+    if (isNaN(quantity) || quantity <= 0){
+        return showMessage("Digite uma quantidade válida", "error");
+    }
+    try {
+        const response = await fetch(API, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, price, quantity })
+        });
+        if (response.ok) {
+            showMessage("Produto adicionado!");
+            document.getElementById("name").value = "";
+            document.getElementById("price").value = "";
+            document.getElementById("quantity").value = "1";
+
+            loadCart();
+        }
+    } catch (err) {
+         showMessage("Erro no servidor", "error");
+         }
 }
 
-async function removeItem(id) {
-    await fetch(`${API}/remove`, { 
-        method: "POST", 
-        headers: { "Content-Type": "application/json" }, 
-        body: JSON.stringify({ id }) 
+async function changeQty(id, action) {
+    await fetch(`${API}/${action}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
     });
     loadCart();
 }
 
 async function deleteItem(id) {
     await fetch(`${API}/${id}`, { method: "DELETE" });
-    showMessage("Item removido");
     loadCart();
 }
 
-async function updateTotal() {
-    const res = await fetch(`${API}/total`);
-    const data = await res.json();
-    const totalEl = document.getElementById("total-amount");
-    totalEl.innerText = formatCurrency(data.total);
-}
+async function checkout(event) {
+    if (event) event.preventDefault();
 
-async function checkout() {
-    // 🔹 NOVA TRAVA DE SEGURANÇA
-    const totalText = document.getElementById("total-amount").innerText;
-    
-    if (totalText.includes("0,00")) {
-        showMessage("Adicione itens ao carrinho antes de finalizar!", "error");
-        return;
-    }
-
-    if (!confirm("Confirmar fechamento do pedido?")) return;
+    if (!confirm("Deseja finalizar este pedido?")) return;
 
     try {
         const response = await fetch(`${API}/checkout`, { method: "POST" });
         const data = await response.json();
 
-        if (!response.ok) throw new Error(data.error || "Erro ao processar checkout");
-
-        // Montando o Recibo Visual
         const details = document.getElementById("receipt-details");
-        let itemsHTML = data.recibo.items.map(item => `
-            <div class="receipt-line">
-                <span>${item.quantity}x ${item.name}</span>
-                <span>${formatCurrency(item.price * item.quantity)}</span>
-            </div>
-        `).join("");
-
         details.innerHTML = `
-            <div class="receipt-body">
-                ${itemsHTML}
-                <div class="receipt-total">
-                    TOTAL: ${formatCurrency(data.recibo.total)}
+            <div style="text-align: left; background: #f9f9f9; padding: 15px; border-radius: 8px; font-size: 0.9rem;">
+                ${data.recibo.items.map(i => `<div style="display:flex; justify-content:space-between"><span>${i.quantity}x ${i.name}</span> <span>${formatCurrency(i.price * i.quantity)}</span></div>`).join("")}
+                <hr style="border: 0; border-top: 1px dashed #ccc; margin: 10px 0;">
+                <div style="display:flex; justify-content:space-between; font-weight:bold; font-size: 1.1rem;">
+                    <span>TOTAL</span> <span>${formatCurrency(data.recibo.total)}</span>
                 </div>
-                <p><small>ID do Pedido: #${Math.floor(Math.random() * 10000)}</small></p>
             </div>
         `;
 
         document.getElementById("receipt-modal").style.display = "flex";
-        loadCart(); // Limpa a tela principal e desativa o botão via renderCart
-    } catch (error) {
-        showMessage(error.message, "error");
-    }
+    } catch (e) { showMessage("Erro ao finalizar compra", "error"); }
+}
+function printReceipt() {
+    window.print();
 }
 
-function closeReceipt() { document.getElementById("receipt-modal").style.display = "none"; }
+function closeReceipt() {
+    document.getElementById("receipt-modal").style.display = "none";
+    loadCart(); 
+}
 
 window.onload = loadCart;

@@ -19,12 +19,12 @@
         <section class="add-item-card">
             <h3>Novo Produto</h3>
             <div class="form-group">
-                <input type="text" id="name" placeholder="Nome do produto" required>
+                <input type="text" id="name" placeholder="Nome do produto" autocomplete="off" required>
                 <div class="row">
-                    <input type="number" id="price" placeholder="Preço (R$)" step="0.01" min="0.01">
-                    <input type="number" id="quantity" placeholder="Qtd" value="1" min="1">
+                    <input type="number" id="price" placeholder="Preço (R$)" step="0.01" min="0.01" autocomplete="off" required>
+                    <input type="number" id="quantity" placeholder="Qtd" value="1" min="1" autocomplete="off" required>
                 </div>
-                <button onclick="addItem()" class="btn-primary">Adicionar ao Carrinho</button>
+                <button type="button" onclick="addItem()" class="btn-primary">Adicionar ao Carrinho</button>
             </div>
         </section>
 
@@ -40,16 +40,25 @@
                 <span>Total do Pedido:</span>
                 <span id="total-amount">R$ 0,00</span>
             </div>
-            <button onclick="checkout()" id="btn-checkout" class="btn-checkout">Finalizar Compra</button>
+            <button type="button" onclick="checkout(event)" id="btn-checkout" class="btn-checkout">Finalizar Compra</button>
         </footer>
     </div>
 
     <div id="receipt-modal" class="modal" style="display: none;">
         <div class="modal-content">
-            <h2>Compra Finalizada!</h2>
+            <div class="modal-header">
+                <h2><i class="fas fa-check-circle"></i>Compra Finalizada!</h2>
+            </div>
             <div id="receipt-details"></div>
-            <button onclick="closeReceipt()" class="btn-close">Fechar</button>
+            <button type="button" onclick="closeReceipt()" class="btn-close">Fechar</button>
+             <div class="modal-actions" style="display: flex; gap: 10px; margin-top: 20px;">
+        <button type="button" onclick="printReceipt()" class="btn-print">
+            <i class="fas fa-print"></i> Imprimir Nota
+        </button>
+        
+    </div>
         </div>
+       
     </div>
 
     <script src="script.js"></script>
