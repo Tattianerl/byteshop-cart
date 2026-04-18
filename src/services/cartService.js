@@ -23,7 +23,6 @@ function saveCart(cartData) {
 function addItem(newItem) {
   const cart = loadCart();
   
-  // Validação extra de segurança no servidor
   if (newItem.quantity <= 0) return; 
 
   const existing = cart.find(item => item.name === newItem.name);

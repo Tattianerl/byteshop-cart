@@ -10,7 +10,7 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-# Variáveis de ambiente (Segurança: nunca enviar senhas/chaves para o GitHub)
+# Variáveis de ambiente 
 .env
 
 # Pasta de build (caso use React/Vite)

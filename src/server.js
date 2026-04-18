@@ -9,12 +9,10 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 1. Configurações Iniciais
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../public")));
 
-// 3. ROTAS DA API (Sempre use /cart antes para organizar)
 app.get("/cart", (req, res) => {
   const cart = cartService.loadCart();
   res.json(cart);

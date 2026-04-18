@@ -1,71 +1,83 @@
-## objtivo
+# 🛒 ByteShop - Carrinho de Compras API
+ByteShop é uma aplicação Full Stack robusta inspirada no fluxo de checkout da Shopee. O projeto foca em oferecer uma experiência de usuário (UX) fluida, com cálculos automáticos, persistência de dados e um sistema de recibo detalhado.
 
-<!-- Criar um carinho de compras baseado no carrinho de compras da shopee, aonde armazene itens e calcule sub-itens automaticamente.  
-
-Dominio da aplicação: Carrinhos de compras
-
-As Entidades representadas:
-carrinho
-itens
-
--->
-# 🛒 DevStore - Carrinho de Compras API
-
-Uma aplicação Full Stack robusta para gerenciamento de carrinho de compras, focada em persistência de dados, validações de segurança e experiência do usuário (UX).
+## 🎯 Objetivo do Projeto
+Desenvolver um sistema de gerenciamento de compras que permita ao usuário manipular itens de forma dinâmica, garantindo a integridade dos cálculos e a persistência das informações através de uma API REST.
 
 ## 🚀 Funcionalidades
+- Gerenciamento Dinâmico: Adicione produtos, aumente/diminua quantidades ou remova itens com apenas um clique.
 
-- **Gerenciamento de Itens**: Adicionar, remover uma unidade, aumentar quantidade ou excluir itens completamente.
-- **Persistência de Dados**: Utiliza um sistema de arquivos JSON (`cart.json`) para manter os dados mesmo após reiniciar o servidor.
-- **Validações Rigorosas**: Proteção contra nomes vazios, preços negativos e quantidades inválidas (tanto no Front quanto no Back-end).
-- **Cálculo em Tempo Real**: Atualização automática do total do pedido.
-- **Checkout com Recibo**: Sistema de finalização de compra com limpeza de carrinho e exibição de recibo detalhado em um modal.
+- Persistência de Dados: Armazenamento via sistema de arquivos JSON (cart.json), garantindo que seus itens não sumam ao reiniciar o servidor.
+
+- Segurança e Validação: Camadas de validação no Front e Back-end contra preços negativos, campos vazios e erros de tipo.
+* **Interface Inteligente**
+  * <small>Cálculo de subtotal e total em tempo real</small>
+  * <small>Botão de checkout que gera recibo visual</small>
+  * <small>Sistema de impressão de nota fiscal (simulação)</small>
+  * <small>Feedback visual via mensagens toast</small>
+
+### 🖥️ Interface & UX
+- [x] **Cálculo em tempo real**: Atualização dinâmica de subtotal e total.
+- [x] **Recibo Visual**: Modal interativo com detalhamento da compra.
+- [x] **Impressão**: Suporte a `@media print` para simulação de nota fiscal.
+- [x] **Toasts**: Notificações flutuantes para feedback de ações.
 
 ## 🛠️ Tecnologias Utilizadas
+ Front-end
+- HTML5 & CSS3: Layout responsivo com design moderno e gradientes premium.
 
-- **Front-end**: HTML5, CSS3, JavaScript Moderno (Async/Await).
-- **Back-end**: Node.js, Express.js.
-- **Armazenamento**: JSON File System (`fs`).
-- **Bibliotecas**: `cors`, `uuid` (para IDs únicos), `nodemon`.
+- JavaScript (ES6+): Manipulação de DOM e consumo de API com `Async/Await`.
+
+- FontAwesome: Ícones para uma interface intuitiva.
+
+Back-end
+- Node.js & Express: Estrutura robusta para rotas e middleware.
+
+- JSON File System (fs): Manipulação de arquivos para persistência local.
+
+- CORS & UUID: Segurança entre domínios e geração de IDs únicos e seguros.
+
+
+## 📂 Estrutura do Projeto
+- `src/`: Lógica principal do servidor Express
+- `public/`: Interface do usuário (HTML, CSS, JS)
+- `services/`: Regras de negócio e manipulação do arquivo JSON
+- `server.js`: Ponto de entrada da aplicação
 
 ## 📦 Como Instalar e Rodar
 
 1. **Clone o repositório**:
    ```bash
    git clone https://github.com/Tattianerl/byteshop-cart.git
-   cd shoppe-cart
-## 📂 Estrutura do Projeto
-- `src/`: Código fonte do servidor e lógica de negócio.
-- `public/`: Arquivos estáticos (HTML, CSS, JS) da interface.
-- `services/`: Camada de serviço que isola a lógica do carrinho.
+   cd byteshop-cart
 
 ## 🛠️ Como executar
 1. Instale as dependências:
-   ```bash
+   ```javascript
    npm install
    ```
 2. Inicie o servidor:
-
-```Bash
-npm start
-```
+   ```javascript
+     npm start
+     ```
 3. Acesse no navegador:
-```Bash
-http://127.0.0.1:5500/public/index.html
-```
+   ```javascript
+   Abra o seu navegador e acesse http://localhost:3000(ou a porta configurada).
+   ```
+
 # 🛣️ Endpoints da API
-GET /cart: Lista todos os itens.
+| Método | Endpoint | Descrição |
+| :--- | :--- | :--- |
+| **GET** | `/cart` | Lista todos os itens no carrinho. |
+| **POST** | `/cart` | Adiciona um novo item (valida nome, preço e qtd). |
+| **POST** | `/cart/add` | Incrementa +1 unidade de um item existente. |
+| **POST** | `/cart/remove` | Decrementa -1 unidade de um item. |
+| **DELETE** | `/cart/:id` | Remove o item completamente pelo ID. |
+| **GET** | `/cart/total` | Retorna o valor total somado. |
+| **POST** | `/cart/checkout` | Finaliza a venda, gera recibo e limpa o carrinho. |
 
-POST /cart: Adiciona um novo item.
-
-POST /cart/remove: Remove uma unidade de um item pelo ID.
-
-Post /cart/add: Adicionar uma unidade (+).
-
-DELETE /cart/:id: Remove o item completamente do carrinho.
-
-GET /cart/total: Retorna a soma total dos valores.
-
-POST/cart/checkout: Finaliza a compra e gera recibo
-
-🔗 [Acesse a ByteShop ao vivo aqui!](https://byteshop-cart.onrender.com/)
+## 🔗 Demonstração
+O projeto está disponível para testes online no Render:
+👉 [Acesse a ByteShop ao vivo aqui!](https://byteshop-cart.onrender.com/)
+---
+**Desenvolvido por** Tatiane RL **Estudante de Desenvolvimento Full Stack focada em soluções práticas e escaláveis.**
